@@ -1,0 +1,28 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js",
+    "prod": "npx pm2 start ecosystem.config.js --env production",
+    "stop": "npx pm2 stop melhiq-bot",
+    "logs": "npx pm2 logs melhiq-bot",
+    "status": "npx pm2 status"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "https-proxy-agent": "^9.0.0",
+    "luxon": "^3.7.2",
+    "mongoose": "^9.5.0",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14",
+    "pm2": "^6.0.14"
+  }
+}
