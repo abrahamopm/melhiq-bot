@@ -18,6 +18,8 @@ const reportSchema = new mongoose.Schema({
         email: String
     },
     status: { type: String, default: 'pending', enum: ['pending', 'reviewed', 'resolved'] },
+    response: String,
+    respondedAt: Date,
     createdAt: { type: Date, default: Date.now }
 });
 

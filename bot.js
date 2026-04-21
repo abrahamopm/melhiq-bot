@@ -59,7 +59,20 @@ const STRINGS = {
         success: "✅ <b>Report Anchored!</b>\n\nYour reference ID: <code>#REF</code>\nYour Secret Key: <code>#KEY</code>\n\n<i>SAVE THIS KEY! It is the only way to track an anonymous report.</i>",
         processing: "Securing Report",
         evidence_added: "✅ Evidence attached!",
-        continue: "➡️ Continue"
+        continue: "➡️ Continue",
+        no_reports: "📝 You have no identified reports.",
+        reports_list: "📋 <b>Your Identified Reports:</b>\n\n",
+        help_text: "🆘 <b>Melhiq Help Guide</b>\n\n" +
+                  "• <b>New Submission:</b> Start a report about safeguarding concerns.\n" +
+                  "• <b>Anonymous Mode:</b> Your identity is hidden. Save the Secret Key!\n" +
+                  "• <b>Identified Mode:</b> We store your name/email for follow-up.\n" +
+                  "• <b>My Reports:</b> View reports you sent in Identified Mode.\n" +
+                  "• <b>Check Report:</b> Use <code>/check [SecretKey]</code> to track anonymous reports.",
+        response_from_admin: "💬 <b>Admin Response:</b>",
+        no_response_yet: "<i>No response yet.</i>",
+        update_notification: "🔔 <b>Update on your report #${REF}:</b>\n\n${MSG}",
+        resolved_notification: "✅ <b>Your report #${REF} has been resolved.</b>",
+        cancel: "❌ Cancel"
     },
     am: {
         welcome: "⚓ <b>እንኳን ወደ መልሕቅ በሰላም መጡ!</b>\n\nእኔ ለኢንጀንደር ሄልዝ (EngenderHealth) YAC የጥበቃ መልሕቅ ነኝ። ይህ ለእርስዎ አስተማማኝ ቦታ ነው።",
@@ -79,7 +92,20 @@ const STRINGS = {
         success: "✅ <b>ሪፖርቱ ተመዝግቧል!</b>\n\nመለያ ቁጥር፡ <code>#REF</code>\nሚስጥራዊ ቁልፍ፡ <code>#KEY</code>\n\n<i>ይህንን ቁልፍ ያስቀምጡ! ስም ሳይጠቅሱ ለላኩት ሪፖርት ብቸኛው መከታተያ ነው::</i>",
         processing: "ሪፖርቱን በማስቀመጥ ላይ",
         evidence_added: "✅ ማስረጃ ተያይዟል!",
-        continue: "➡️ ቀጥል"
+        continue: "➡️ ቀጥል",
+        no_reports: "📝 ምንም የተመዘገበ ሪፖርት የለዎትም።",
+        reports_list: "📋 <b>የእርስዎ ሪፖርቶች፡</b>\n\n",
+        help_text: "🆘 <b>የመልሕቅ እርዳታ መመሪያ</b>\n\n" +
+                  "• <b>አዲስ ሪፖርት፡</b> የጥበቃ ስጋቶችን ሪፖርት ለማድረግ ይጀምሩ::\n" +
+                  "• <b>ማንነትን መደበቅ፡</b> ማንነትዎ አይታወቅም። ሚስጥራዊ ቁልፉን ያስቀምጡ!\n" +
+                  "• <b>ማንነትን ማሳወቅ፡</b> ለቀጥታ ክትትል ስምዎን/ኢሜልዎን እናስቀምጣለን።\n" +
+                  "• <b>የእኔ ሪፖርቶች፡</b> ስምዎን ጠቅሰው የላኳቸውን ሪፖርቶች እዚህ ያገኛሉ።\n" +
+                  "• <b>ሪፖርት መከታተያ፡</b> ስም ሳይጠቅሱ የላኩትን ሪፖርት ለመከታተል <code>/check [SecretKey]</code> ይጠቀሙ::",
+        response_from_admin: "💬 <b>የአስተዳዳሪ ምላሽ፡</b>",
+        no_response_yet: "<i>እስካሁን ምንም ምላሽ አልተሰጠም።</i>",
+        update_notification: "🔔 <b>በሪፖርት ቁጥር #${REF} ላይ የተሰጠ ምላሽ፡</b>\n\n${MSG}",
+        resolved_notification: "✅ <b>የሪፖርት ቁጥር #${REF} ተፈቷል (Resolved)።</b>",
+        cancel: "❌ ሰርዝ"
     }
 };
 
@@ -103,7 +129,14 @@ const getUI = (ctx) => ({
     ]),
 
     evidence: Markup.inlineKeyboard([
-        [Markup.button.callback(t(ctx, 'continue'), 'evidence_done')]
+        [Markup.button.callback(t(ctx, 'continue'), 'evidence_done')],
+        [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
+    ]),
+
+    anonymity: Markup.inlineKeyboard([
+        [Markup.button.callback(t(ctx, 'anon_desc').split('\n')[0], 'anon_yes')],
+        [Markup.button.callback(t(ctx, 'identified').split('\n')[0], 'anon_no')],
+        [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
     ])
 });
 
@@ -154,6 +187,47 @@ bot.hears([STRINGS.en.new_sub, STRINGS.am.new_sub], (ctx) => {
 
 bot.hears([STRINGS.en.safety_info, STRINGS.am.safety_info], (ctx) => {
     ctx.replyWithHTML(t(ctx, 'safety_info') + "\n\n" + (ctx.session.lang === 'am' ? "ኢንጀንደር ሄልዝ ሁሉንም ተሳታፊዎች የመጠበቅ ሃላፊነት አለበት::" : "EngenderHealth is committed to protecting all participants."));
+});
+
+bot.hears([STRINGS.en.profile, STRINGS.am.profile], async (ctx) => {
+    try {
+        const reports = await Report.find({ userId: ctx.from.id }).sort({ createdAt: -1 }).limit(10);
+        
+        if (reports.length === 0) {
+            return ctx.replyWithHTML(t(ctx, 'no_reports'));
+        }
+
+        let text = t(ctx, 'reports_list');
+        reports.forEach(r => {
+            const statusEmoji = r.status === 'resolved' ? '✅' : (r.status === 'reviewed' ? '👀' : '⏳');
+            text += `• <code>#${r._id.toString().slice(-6)}</code> | ${r.type.toUpperCase()} | ${statusEmoji} <b>${r.status.toUpperCase()}</b>\n`;
+            if (r.response) {
+                text += `  ${t(ctx, 'response_from_admin')} ${r.response}\n`;
+            }
+            text += `  <i>${DateTime.fromJSDate(r.createdAt).toFormat('yyyy-MM-dd HH:mm')}</i>\n\n`;
+        });
+
+        
+        text += (ctx.session.lang === 'am' ? 
+            "<i>ማሳሰቢያ፡ ስም ሳይጠቀስ የተላከ ሪፖርትን ለመከታተል /check [ሚስጥራዊ_ቁልፍ] ይጠቀሙ::</i>" : 
+            "<i>Note: For anonymous reports, use /check [SecretKey] to track status.</i>");
+
+        ctx.replyWithHTML(text);
+    } catch (err) {
+        console.error('Error fetching reports:', err);
+        ctx.reply("⚠️ Error loading reports.");
+    }
+});
+
+bot.hears([STRINGS.en.help, STRINGS.am.help], (ctx) => {
+    ctx.replyWithHTML(t(ctx, 'help_text'));
+});
+
+
+bot.action('cancel_report', async (ctx) => {
+    ctx.session = { lang: ctx.session.lang };
+    await ctx.answerCbQuery();
+    await ctx.reply(t(ctx, 'main_menu'), getUI(ctx).main);
 });
 
 // Callback Action Handlers
@@ -284,16 +358,121 @@ bot.command('check', async (ctx) => {
     const key = ctx.message.text.split(' ')[1];
     if (!key) return ctx.reply("Usage: /check [SecretKey]");
     
-    const report = await Report.findOne({ secretKey: key.toUpperCase() });
-    if (!report) return ctx.reply("❌ Invalid Secret Key.");
-    
-    ctx.replyWithHTML(
-        `🔍 <b>Report Status</b>\n\n` +
-        `ID: #${report._id.toString().slice(-6)}\n` +
-        `Status: <b>${report.status.toUpperCase()}</b>\n` +
-        `Created: ${DateTime.fromJSDate(report.createdAt).toFormat('ff')}`
-    );
+    try {
+        const report = await Report.findOne({ secretKey: key.toUpperCase() });
+        if (!report) return ctx.reply("❌ Invalid Secret Key.");
+        
+        const statusEmoji = report.status === 'resolved' ? '✅' : (report.status === 'reviewed' ? '👀' : '⏳');
+        
+        let text = `🔍 <b>Report Status</b>\n\n` +
+            `ID: <code>#${report._id.toString().slice(-6)}</code>\n` +
+            `Status: ${statusEmoji} <b>${report.status.toUpperCase()}</b>\n` +
+            `Type: ${report.type.toUpperCase()}\n` +
+            `Created: ${DateTime.fromJSDate(report.createdAt).toFormat('ff')}\n\n` +
+            `📝 <b>Details:</b>\n${report.details}\n\n`;
+            
+        if (report.response) {
+            text += `${t(ctx, 'response_from_admin')}\n${report.response}\n\n`;
+        } else {
+            text += `${t(ctx, 'no_response_yet')}\n\n`;
+        }
+        
+        ctx.replyWithHTML(text);
+    } catch (err) {
+        ctx.reply("Error: " + err.message);
+    }
 });
+
+// Admin Commands
+bot.command('list', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const reports = await Report.find({ status: 'pending' }).sort({ createdAt: 1 }).limit(10);
+    if (reports.length === 0) return ctx.reply("No pending reports.");
+    
+    let text = "⏳ <b>Pending Reports:</b>\n\n";
+    reports.forEach(r => {
+        text += `• <code>${r._id.toString()}</code>\n` +
+                `  Type: ${r.type.toUpperCase()}\n` +
+                `  User: ${r.username}\n` +
+                `  Snippet: <i>${r.details.substring(0, 50)}...</i>\n\n`;
+    });
+    ctx.replyWithHTML(text);
+});
+
+bot.command('stats', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    try {
+        const totalReports = await Report.countDocuments();
+        const pendingReports = await Report.countDocuments({ status: 'pending' });
+        const resolvedReports = await Report.countDocuments({ status: 'resolved' });
+        const totalUsers = await User.countDocuments();
+        
+        ctx.replyWithHTML(
+            `📊 <b>Melhiq Stats</b>\n\n` +
+            `Total Users: ${totalUsers}\n` +
+            `Total Reports: ${totalReports}\n` +
+            `Pending: ${pendingReports}\n` +
+            `Resolved: ${resolvedReports}`
+        );
+    } catch (err) {
+        ctx.reply("Error: " + err.message);
+    }
+});
+
+
+bot.command('respond', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const args = ctx.message.text.split(' ');
+    if (args.length < 3) return ctx.reply("Usage: /respond [FullID] [Message]");
+    
+    const reportId = args[1];
+    const responseText = args.slice(2).join(' ');
+    
+    try {
+        const report = await Report.findById(reportId);
+        if (!report) return ctx.reply("Report not found.");
+        
+        report.response = responseText;
+        report.respondedAt = new Date();
+        report.status = 'reviewed';
+        await report.save();
+        
+        ctx.reply("✅ Response saved and status updated to REVIEWED.");
+        
+        // Notify user if identified
+        if (report.userId !== 0) {
+            const lang = report.language || 'en';
+            const notification = STRINGS[lang].update_notification
+                .replace('${REF}', report._id.toString().slice(-6))
+                .replace('${MSG}', responseText);
+            ctx.telegram.sendMessage(report.userId, notification, { parse_mode: 'HTML' }).catch(() => {});
+        }
+    } catch (err) {
+        ctx.reply("Error: " + err.message);
+    }
+});
+
+bot.command('resolve', async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return;
+    const id = ctx.message.text.split(' ')[1];
+    if (!id) return ctx.reply("Usage: /resolve [FullID]");
+    
+    try {
+        const report = await Report.findByIdAndUpdate(id, { status: 'resolved' }, { new: true });
+        if (!report) return ctx.reply("Report not found.");
+        ctx.reply(`✅ Report #${report._id.toString().slice(-6)} marked as RESOLVED.`);
+        
+        if (report.userId !== 0) {
+            const lang = report.language || 'en';
+            const notification = STRINGS[lang].resolved_notification
+                .replace('${REF}', report._id.toString().slice(-6));
+            ctx.telegram.sendMessage(report.userId, notification, { parse_mode: 'HTML' }).catch(() => {});
+        }
+    } catch (err) {
+        ctx.reply("Error: " + err.message);
+    }
+});
+
 
 // Error handling & Launch
 const startBot = async () => {
