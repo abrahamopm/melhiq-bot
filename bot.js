@@ -76,11 +76,18 @@ const STRINGS = {
         no_reports: "📝 You have no identified reports.",
         reports_list: "📋 <b>Your Identified Reports:</b>\n\n",
         help_text: "🆘 <b>Melhiq Help Guide</b>\n\n" +
-                  "• <b>New Submission:</b> Start a report about safeguarding concerns.\n" +
-                  "• <b>Anonymous Mode:</b> Your identity is hidden. Save the Secret Key!\n" +
-                  "• <b>Identified Mode:</b> We store your name/email for follow-up.\n" +
-                  "• <b>My Reports:</b> View reports you sent in Identified Mode.\n" +
-                  "• <b>Check Report:</b> Use <code>/check [SecretKey]</code> to track anonymous reports.",
+                  "• <b>📝 New Submission:</b> Start a report about safeguarding concerns.\n" +
+                  "• <b>👤 Anonymous Mode:</b> Your identity is hidden. Save the Secret Key!\n" +
+                  "• <b>🆔 Identified Mode:</b> We store your name/email for follow-up.\n" +
+                  "• <b>📋 My Reports:</b> View and manage reports you sent in Identified Mode.\n" +
+                  "• <b>🔍 Check Report:</b> Use <code>/check [SecretKey]</code> to track anonymous reports.",
+        help_admin: "\n\n🛠️ <b>Admin Control Panel:</b>\n" +
+                   "• <code>/list</code> - View pending reports (click ID to copy)\n" +
+                   "• <code>/respond [ID] [Msg]</code> - Reply to a specific report\n" +
+                   "• <code>/resolve [ID]</code> - Mark a report as finished\n" +
+                   "• <code>/stats</code> - View system statistics\n" +
+                   "• <code>/broadcast [Msg]</code> - Send message to ALL users\n\n" +
+                   "<i>Note: IDs are the long hex strings provided in notifications.</i>",
         response_from_admin: "💬 <b>Admin Response:</b>",
         no_response_yet: "<i>No response yet.</i>",
         update_notification: "🔔 <b>Update on your report #${REF}:</b>\n\n${MSG}",
@@ -126,11 +133,18 @@ const STRINGS = {
         no_reports: "📝 ምንም የተመዘገበ ሪፖርት የለዎትም።",
         reports_list: "📋 <b>የእርስዎ ሪፖርቶች፡</b>\n\n",
         help_text: "🆘 <b>የመልሕቅ እርዳታ መመሪያ</b>\n\n" +
-                  "• <b>አዲስ ሪፖርት፡</b> የጥበቃ ስጋቶችን ሪፖርት ለማድረግ ይጀምሩ::\n" +
-                  "• <b>ማንነትን መደበቅ፡</b> ማንነትዎ አይታወቅም። ሚስጥራዊ ቁልፉን ያስቀምጡ!\n" +
-                  "• <b>ማንነትን ማሳወቅ፡</b> ለቀጥታ ክትትል ስምዎን/ኢሜልዎን እናስቀምጣለን።\n" +
-                  "• <b>የእኔ ሪፖርቶች፡</b> ስምዎን ጠቅሰው የላኳቸውን ሪፖርቶች እዚህ ያገኛሉ።\n" +
-                  "• <b>ሪፖርት መከታተያ፡</b> ስም ሳይጠቅሱ የላኩትን ሪፖርት ለመከታተል <code>/check [SecretKey]</code> ይጠቀሙ::",
+                  "• <b>📝 አዲስ ሪፖርት፡</b> የጥበቃ ስጋቶችን ሪፖርት ለማድረግ ይጀምሩ::\n" +
+                  "• <b>👤 ማንነትን መደበቅ፡</b> ማንነትዎ አይታወቅም። ሚስጥራዊ ቁልፉን ያስቀምጡ!\n" +
+                  "• <b>🆔 ማንነትን ማሳወቅ፡</b> ለቀጥታ ክትትል ስምዎን/ኢሜልዎን እናስቀምጣለን።\n" +
+                  "• <b>📋 የእኔ ሪፖርቶች፡</b> ስምዎን ጠቅሰው የላኳቸውን ሪፖርቶች እዚህ ያገኛሉ።\n" +
+                  "• <b>🔍 ሪፖርት መከታተያ፡</b> ስም ሳይጠቅሱ የላኩትን ሪፖርት ለመከታተል <code>/check [SecretKey]</code> ይጠቀሙ::",
+        help_admin: "\n\n🛠️ <b>የአስተዳዳሪ መቆጣጠሪያ፡</b>\n" +
+                   "• <code>/list</code> - በመጠባበቅ ላይ ያሉ ሪፖርቶችን ለማየት (ID ለመቅዳት ይጫኑ)\n" +
+                   "• <code>/respond [ID] [ምላሽ]</code> - ለተወሰነ ሪፖርት ምላሽ ለመስጠት\n" +
+                   "• <code>/resolve [ID]</code> - ሪፖርት ተጠናቋል ለማለት\n" +
+                   "• <code>/stats</code> - አጠቃላይ መረጃ ለማየት\n" +
+                   "• <code>/broadcast [መልዕክት]</code> - ለሁሉም ተጠቃሚዎች መልዕክት ለመላክ\n\n" +
+                   "<i>ማሳሰቢያ፡ ID ማለት በሪፖርት ማሳወቂያ ላይ የሚመጣው ረጅም ቁጥር ነው።</i>",
         response_from_admin: "💬 <b>የአስተዳዳሪ ምላሽ፡</b>",
         no_response_yet: "<i>እስካሁን ምንም ምላሽ አልተሰጠም።</i>",
         update_notification: "🔔 <b>በሪፖርት ቁጥር #${REF} ላይ የተሰጠ ምላሽ፡</b>\n\n${MSG}",
@@ -179,7 +193,13 @@ const getUI = (ctx) => ({
     ])
 });
 
-const isAdmin = (id) => ADMIN_IDS.includes(id.toString());
+const isAdmin = (id) => {
+    const is = ADMIN_IDS.includes(id.toString());
+    if (!is) {
+        console.log(`🚫 [ADMIN CHECK] ID ${id} is NOT in admin list:`, ADMIN_IDS);
+    }
+    return is;
+};
 
 // --- Bot Logic ---
 
@@ -251,8 +271,22 @@ bot.hears([STRINGS.en.profile, STRINGS.am.profile], async (ctx) => {
 
 
 bot.hears([STRINGS.en.help, STRINGS.am.help], (ctx) => {
-    ctx.replyWithHTML(t(ctx, 'help_text'));
+    return showHelp(ctx);
 });
+
+bot.command('help', (ctx) => {
+    return showHelp(ctx);
+});
+
+async function showHelp(ctx) {
+    let text = t(ctx, 'help_text');
+    if (isAdmin(ctx.from.id)) {
+        text += t(ctx, 'help_admin');
+    }
+    await ctx.replyWithHTML(text);
+}
+
+
 
 
 bot.action('cancel_report', async (ctx) => {
@@ -426,10 +460,11 @@ async function finalizeReport(ctx) {
 
         // Notify Admins
         const adminMsg = 
-            `🚨 <b>NEW REPORT [#${report._id.toString().slice(-6)}]</b>\n` +
+            `🚨 <b>NEW REPORT</b>\n` +
+            `ID: <code>${report._id.toString()}</code>\n` +
             `Type: ${type.toUpperCase()}\n` +
             `Anon: ${isAnonymous ? 'YES' : 'NO'}\n` +
-            `Key: ${secretKey || 'N/A'}\n\n` +
+            `Key: <code>${secretKey || 'N/A'}</code>\n\n` +
             `Details: ${details}`;
         
         for (const adminId of ADMIN_IDS) {
@@ -510,12 +545,13 @@ bot.command('list', async (ctx) => {
     let text = "⏳ <b>Pending Reports:</b>\n\n";
     reports.forEach(r => {
         text += `• <code>${r._id.toString()}</code>\n` +
-                `  Type: ${r.type.toUpperCase()}\n` +
-                `  User: ${r.username}\n` +
+                `  Type: ${r.type.toUpperCase()} | User: ${r.username}\n` +
                 `  Snippet: <i>${r.details.substring(0, 50)}...</i>\n\n`;
     });
+    text += "<i>Click the ID to copy, then use /respond [ID] [Message]</i>";
     ctx.replyWithHTML(text);
 });
+
 
 bot.command('stats', async (ctx) => {
     if (!isAdmin(ctx.from.id)) return;
