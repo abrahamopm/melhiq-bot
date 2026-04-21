@@ -194,9 +194,11 @@ const getUI = (ctx) => ({
 });
 
 const isAdmin = (id) => {
-    const is = ADMIN_IDS.includes(id.toString());
+    if (!id) return false;
+    const userId = id.toString().trim();
+    const is = ADMIN_IDS.includes(userId);
     if (!is) {
-        console.log(`🚫 [ADMIN CHECK] ID ${id} is NOT in admin list:`, ADMIN_IDS);
+        console.log(`🚫 [ADMIN CHECK] User ${userId} is NOT in list: [${ADMIN_IDS.join(', ')}]`);
     }
     return is;
 };
@@ -269,6 +271,10 @@ bot.hears([STRINGS.en.profile, STRINGS.am.profile], async (ctx) => {
     }
 });
 
+
+bot.command('myid', (ctx) => {
+    ctx.replyWithHTML(`Your Telegram ID is: <code>${ctx.from.id}</code>`);
+});
 
 bot.hears([STRINGS.en.help, STRINGS.am.help], (ctx) => {
     return showHelp(ctx);
@@ -411,32 +417,7 @@ async function showSummary(ctx) {
 }
 
 // Universal Input Handler
-bot.on(['text', 'photo', 'document'], async (ctx) => {
-    const state = ctx.session?.state;
-    if (!state) return;
 
-    if (state === 'AWAITING_DETAILS' && ctx.message.text) {
-        ctx.session.details = ctx.message.text;
-        ctx.session.state = 'AWAITING_EVIDENCE';
-        await ctx.replyWithHTML(t(ctx, 'step3'), getUI(ctx).evidence);
-    } 
-    else if (state === 'AWAITING_EVIDENCE') {
-        const fileId = ctx.message.photo ? ctx.message.photo.pop().file_id : (ctx.message.document?.file_id);
-        if (fileId) {
-            ctx.session.evidence.push({ fileId, fileType: ctx.message.photo ? 'photo' : 'document' });
-            await ctx.reply(t(ctx, 'evidence_added'), getUI(ctx).evidence);
-        }
-    }
-    else if (state === 'AWAITING_NAME' && ctx.message.text) {
-        ctx.session.name = ctx.message.text;
-        ctx.session.state = 'AWAITING_EMAIL';
-        await ctx.reply("Email / ኢሜል:");
-    }
-    else if (state === 'AWAITING_EMAIL' && ctx.message.text) {
-        ctx.session.email = ctx.message.text;
-        await showSummary(ctx);
-    }
-});
 
 async function finalizeReport(ctx) {
     const { type, details, isAnonymous, name, email, evidence, secretKey, lang } = ctx.session;
@@ -626,6 +607,38 @@ bot.command('resolve', async (ctx) => {
         ctx.reply("Error: " + err.message);
     }
 });
+
+// Universal Input Handler (Registered last to avoid swallowing commands)
+bot.on(['text', 'photo', 'document'], async (ctx) => {
+    const state = ctx.session?.state;
+    if (!state) return;
+
+    // Skip if it looks like a command
+    if (ctx.message.text?.startsWith('/')) return;
+
+    if (state === 'AWAITING_DETAILS' && ctx.message.text) {
+        ctx.session.details = ctx.message.text;
+        ctx.session.state = 'AWAITING_EVIDENCE';
+        await ctx.replyWithHTML(t(ctx, 'step3'), getUI(ctx).evidence);
+    } 
+    else if (state === 'AWAITING_EVIDENCE') {
+        const fileId = ctx.message.photo ? ctx.message.photo.pop().file_id : (ctx.message.document?.file_id);
+        if (fileId) {
+            ctx.session.evidence.push({ fileId, fileType: ctx.message.photo ? 'photo' : 'document' });
+            await ctx.reply(t(ctx, 'evidence_added'), getUI(ctx).evidence);
+        }
+    }
+    else if (state === 'AWAITING_NAME' && ctx.message.text) {
+        ctx.session.name = ctx.message.text;
+        ctx.session.state = 'AWAITING_EMAIL';
+        await ctx.reply("Email / ኢሜል:");
+    }
+    else if (state === 'AWAITING_EMAIL' && ctx.message.text) {
+        ctx.session.email = ctx.message.text;
+        await showSummary(ctx);
+    }
+});
+
 
 
 // Error handling & Launch
