@@ -481,12 +481,34 @@ bot.command('broadcast', async (ctx) => {
     if (!msg) return ctx.reply("Usage: /broadcast [message]");
     
     const users = await User.find();
-    let count = 0;
+    if (users.length === 0) return ctx.reply("No users found.");
+
+    let success = 0;
+    let failed = 0;
+    
+    const statusMsg = await ctx.reply(`🚀 Broadcasting to ${users.length} users...`);
+    
     for (const user of users) {
-        await ctx.telegram.sendMessage(user.telegramId, `📢 <b>Message from Melhiq:</b>\n\n${msg}`, { parse_mode: 'HTML' }).then(() => count++).catch(() => {});
+        try {
+            await ctx.telegram.sendMessage(user.telegramId, `📢 <b>Message from Melhiq:</b>\n\n${msg}`, { parse_mode: 'HTML' });
+            success++;
+        } catch (err) {
+            failed++;
+            console.log(`❌ Broadcast failed for ${user.telegramId}: ${err.message}`);
+        }
     }
-    ctx.reply(`Broadcast sent to ${count} users.`);
+    
+    await ctx.telegram.deleteMessage(ctx.chat.id, statusMsg.message_id).catch(() => {});
+    
+    ctx.replyWithHTML(
+        `🏁 <b>Broadcast Report</b>\n\n` +
+        `✅ Successfully Delivered: <b>${success}</b>\n` +
+        `❌ Failed / Blocked: <b>${failed}</b>\n` +
+        `📈 Success Rate: <b>${Math.round((success / users.length) * 100)}%</b>\n\n` +
+        `<i>Note: Users who blocked the bot are counted as failed.</i>`
+    );
 });
+
 
 bot.command('check', async (ctx) => {
     const key = ctx.message.text.split(' ')[1];
