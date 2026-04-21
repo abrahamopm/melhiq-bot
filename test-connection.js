@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { HttpsProxyAgent } = require('https-proxy-agent');
+const HttpsProxyAgent = require('https-proxy-agent');
 require('dotenv').config();
 
 async function test() {

@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Telegraf, Markup, session } = require('telegraf');
 const mongoose = require('mongoose');
-const { HttpsProxyAgent } = require('https-proxy-agent');
+const HttpsProxyAgent = require('https-proxy-agent');
 const { DateTime } = require('luxon');
 const crypto = require('crypto');
 const Report = require('./models/Report');
@@ -30,6 +30,14 @@ const connectDB = async () => {
 connectDB();
 
 bot.use(session());
+
+// Global Logging Middleware
+bot.use((ctx, next) => {
+    if (ctx.message) {
+        console.log(`📩 [MSG] From: ${ctx.from.id} | Text: ${ctx.message.text || '[Non-text]'}`);
+    }
+    return next();
+});
 
 // --- Localization ---
 const STRINGS = {
@@ -104,14 +112,23 @@ const isAdmin = (id) => ADMIN_IDS.includes(id.toString());
 // --- Bot Logic ---
 
 bot.start(async (ctx) => {
+    console.log(`📥 [START] Command received from user: ${ctx.from.id}`);
     ctx.session = {};
-    // Save user
-    await User.findOneAndUpdate(
-        { telegramId: ctx.from.id },
-        { username: ctx.from.username, firstName: ctx.from.first_name },
-        { upsert: true }
-    );
+    
+    try {
+        console.log('🛰️ Updating user profile in DB...');
+        // Save user
+        await User.findOneAndUpdate(
+            { telegramId: ctx.from.id },
+            { username: ctx.from.username, firstName: ctx.from.first_name },
+            { upsert: true }
+        );
+        console.log('✅ User profile updated');
+    } catch (dbErr) {
+        console.error('❌ DB Update Failed inside /start:', dbErr.message);
+    }
 
+    console.log('📤 Sending welcome message...');
     await ctx.replyWithHTML(
         "⚓ <b>Melhiq | መልሕቅ</b>\n\n" + STRINGS.en.lang_choice,
         Markup.inlineKeyboard([
