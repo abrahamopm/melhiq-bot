@@ -56,7 +56,20 @@ const STRINGS = {
         step5: "<b>Step 5/5: Contact</b>\nPlease provide your Name/Email:",
         anon_desc: "👤 <b>Anonymous Mode:</b> We will NOT store your Telegram ID or name with the report. You will receive a <b>Secret Key</b> to track your report.",
         identified: "🆔 <b>Identified Mode:</b> Your name and email will be shared with the Safeguarding Team for direct follow-up.",
-        success: "✅ <b>Report Anchored!</b>\n\nYour reference ID: <code>#REF</code>\nYour Secret Key: <code>#KEY</code>\n\n<i>SAVE THIS KEY! It is the only way to track an anonymous report.</i>",
+        success_anon: "✅ <b>Report Anchored Anonymously!</b>\n\n" +
+                      "Reference ID: <code>#REF</code>\n" +
+                      "Secret Key: <code>#KEY</code>\n\n" +
+                      "⚠️ <b>SAVE THIS KEY!</b> It is the only way to track your report. We do not know who you are, so we cannot recover it for you.",
+        success_id: "✅ <b>Report Anchored!</b>\n\n" +
+                    "Reference ID: <code>#REF</code>\n\n" +
+                    "You can track the status of this report in the <b>'My Reports'</b> menu.",
+        summary: "📝 <b>Report Summary</b>\n\n" +
+                 "Type: <b>#TYPE</b>\n" +
+                 "Privacy: <b>#PRIVACY</b>\n" +
+                 "Details: #DETAILS\n" +
+                 "Evidence: #EVIDENCE files\n\n" +
+                 "Is this correct?",
+        confirm: "✅ Confirm & Submit",
         processing: "Securing Report",
         evidence_added: "✅ Evidence attached!",
         continue: "➡️ Continue",
@@ -72,7 +85,11 @@ const STRINGS = {
         no_response_yet: "<i>No response yet.</i>",
         update_notification: "🔔 <b>Update on your report #${REF}:</b>\n\n${MSG}",
         resolved_notification: "✅ <b>Your report #${REF} has been resolved.</b>",
-        cancel: "❌ Cancel"
+        cancel: "❌ Cancel",
+        back: "⬅️ Back",
+        view_details: "📄 View Details",
+        delete_report: "🗑️ Withdraw Report",
+        confirm_delete: "Are you sure you want to withdraw this report? This cannot be undone."
     },
     am: {
         welcome: "⚓ <b>እንኳን ወደ መልሕቅ በሰላም መጡ!</b>\n\nእኔ ለኢንጀንደር ሄልዝ (EngenderHealth) YAC የጥበቃ መልሕቅ ነኝ። ይህ ለእርስዎ አስተማማኝ ቦታ ነው።",
@@ -89,7 +106,20 @@ const STRINGS = {
         step5: "<b>ደረጃ 5/5፡ አድራሻ</b>\nእባክዎን ስምዎን እና ኢሜልዎን ያስገቡ፡",
         anon_desc: "👤 <b>ማንነትን መደበቅ፡</b> የእርስዎን የቴሌግራም መለያ ወይም ስም ከሪፖርቱ ጋር አንይዝም። ሪፖርቱን ለመከታተል <b>ሚስጥራዊ ቁልፍ</b> ይሰጥዎታል።",
         identified: "🆔 <b>ማንነትን ማሳወቅ፡</b> ለቀጥታ ክትትል ስምዎ እና ኢሜልዎ ለጥበቃ ቡድኑ ይጋራሉ።",
-        success: "✅ <b>ሪፖርቱ ተመዝግቧል!</b>\n\nመለያ ቁጥር፡ <code>#REF</code>\nሚስጥራዊ ቁልፍ፡ <code>#KEY</code>\n\n<i>ይህንን ቁልፍ ያስቀምጡ! ስም ሳይጠቅሱ ለላኩት ሪፖርት ብቸኛው መከታተያ ነው::</i>",
+        success_anon: "✅ <b>ሪፖርቱ በምስጢር ተመዝግቧል!</b>\n\n" +
+                      "መለያ ቁጥር፡ <code>#REF</code>\n" +
+                      "ሚስጥራዊ ቁልፍ፡ <code>#KEY</code>\n\n" +
+                      "⚠️ <b>ይህንን ቁልፍ ያስቀምጡ!</b> ሪፖርትዎን ለመከታተል ብቸኛው መንገድ ይህ ነው። ማንነትዎ ስለማይታወቅ ቁልፉ ቢጠፋ ልናገኘው አንችልም።",
+        success_id: "✅ <b>ሪፖርቱ ተመዝግቧል!</b>\n\n" +
+                    "መለያ ቁጥር፡ <code>#REF</code>\n\n" +
+                    "የሪፖርቱን ሁኔታ <b>'የእኔ ሪፖርቶች'</b> በሚለው ማውጫ ውስጥ መከታተል ይችላሉ።",
+        summary: "📝 <b>የሪፖርት ማጠቃለያ</b>\n\n" +
+                 "ዓይነት፡ <b>#TYPE</b>\n" +
+                 "ግላዊነት፡ <b>#PRIVACY</b>\n" +
+                 "ዝርዝር፡ #DETAILS\n" +
+                 "ማስረጃ፡ #EVIDENCE ፋይሎች\n\n" +
+                 "ትክክል ነው?",
+        confirm: "✅ አረጋግጥና ላክ",
         processing: "ሪፖርቱን በማስቀመጥ ላይ",
         evidence_added: "✅ ማስረጃ ተያይዟል!",
         continue: "➡️ ቀጥል",
@@ -105,7 +135,11 @@ const STRINGS = {
         no_response_yet: "<i>እስካሁን ምንም ምላሽ አልተሰጠም።</i>",
         update_notification: "🔔 <b>በሪፖርት ቁጥር #${REF} ላይ የተሰጠ ምላሽ፡</b>\n\n${MSG}",
         resolved_notification: "✅ <b>የሪፖርት ቁጥር #${REF} ተፈቷል (Resolved)።</b>",
-        cancel: "❌ ሰርዝ"
+        cancel: "❌ ሰርዝ",
+        back: "⬅️ ተመለስ",
+        view_details: "📄 ዝርዝር አሳይ",
+        delete_report: "🗑️ ሪፖርቱን ሰርዝ",
+        confirm_delete: "እርግጠኛ ነዎት ይህንን ሪፖርት መሰረዝ ይፈልጋሉ? ይህ ድርጊት ሊመለስ አይችልም።"
     }
 };
 
@@ -123,11 +157,6 @@ const getUI = (ctx) => ({
         [Markup.button.callback('🚫 Complaint / ቅሬታ', 'type_complaint')]
     ]),
 
-    anonymity: Markup.inlineKeyboard([
-        [Markup.button.callback(t(ctx, 'anon_desc').split('\n')[0], 'anon_yes')],
-        [Markup.button.callback(t(ctx, 'identified').split('\n')[0], 'anon_no')]
-    ]),
-
     evidence: Markup.inlineKeyboard([
         [Markup.button.callback(t(ctx, 'continue'), 'evidence_done')],
         [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
@@ -137,6 +166,16 @@ const getUI = (ctx) => ({
         [Markup.button.callback(t(ctx, 'anon_desc').split('\n')[0], 'anon_yes')],
         [Markup.button.callback(t(ctx, 'identified').split('\n')[0], 'anon_no')],
         [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
+    ]),
+
+    confirmation: Markup.inlineKeyboard([
+        [Markup.button.callback(t(ctx, 'confirm'), 'confirm_submit')],
+        [Markup.button.callback(t(ctx, 'back'), 'back_to_anonymity')],
+        [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
+    ]),
+
+    backOnly: Markup.inlineKeyboard([
+        [Markup.button.callback(t(ctx, 'back'), 'back_to_main')]
     ])
 });
 
@@ -198,26 +237,18 @@ bot.hears([STRINGS.en.profile, STRINGS.am.profile], async (ctx) => {
         }
 
         let text = t(ctx, 'reports_list');
-        reports.forEach(r => {
+        const buttons = reports.map(r => {
             const statusEmoji = r.status === 'resolved' ? '✅' : (r.status === 'reviewed' ? '👀' : '⏳');
-            text += `• <code>#${r._id.toString().slice(-6)}</code> | ${r.type.toUpperCase()} | ${statusEmoji} <b>${r.status.toUpperCase()}</b>\n`;
-            if (r.response) {
-                text += `  ${t(ctx, 'response_from_admin')} ${r.response}\n`;
-            }
-            text += `  <i>${DateTime.fromJSDate(r.createdAt).toFormat('yyyy-MM-dd HH:mm')}</i>\n\n`;
+            return [Markup.button.callback(`${statusEmoji} #${r._id.toString().slice(-6)}`, `view_${r._id}`)];
         });
-
         
-        text += (ctx.session.lang === 'am' ? 
-            "<i>ማሳሰቢያ፡ ስም ሳይጠቀስ የተላከ ሪፖርትን ለመከታተል /check [ሚስጥራዊ_ቁልፍ] ይጠቀሙ::</i>" : 
-            "<i>Note: For anonymous reports, use /check [SecretKey] to track status.</i>");
-
-        ctx.replyWithHTML(text);
+        ctx.replyWithHTML(text, Markup.inlineKeyboard(buttons));
     } catch (err) {
         console.error('Error fetching reports:', err);
         ctx.reply("⚠️ Error loading reports.");
     }
 });
+
 
 bot.hears([STRINGS.en.help, STRINGS.am.help], (ctx) => {
     ctx.replyWithHTML(t(ctx, 'help_text'));
@@ -228,6 +259,71 @@ bot.action('cancel_report', async (ctx) => {
     ctx.session = { lang: ctx.session.lang };
     await ctx.answerCbQuery();
     await ctx.reply(t(ctx, 'main_menu'), getUI(ctx).main);
+});
+
+bot.action('back_to_main', async (ctx) => {
+    await ctx.answerCbQuery();
+    await ctx.reply(t(ctx, 'main_menu'), getUI(ctx).main);
+});
+
+bot.action('back_to_anonymity', async (ctx) => {
+    await ctx.answerCbQuery();
+    await ctx.replyWithHTML(t(ctx, 'step4'), getUI(ctx).anonymity);
+});
+
+bot.action(/view_(.+)/, async (ctx) => {
+    const id = ctx.match[1];
+    try {
+        const report = await Report.findById(id);
+        if (!report) return ctx.answerCbQuery("Report not found.");
+        
+        const statusEmoji = report.status === 'resolved' ? '✅' : (report.status === 'reviewed' ? '👀' : '⏳');
+        let text = `📄 <b>Report Details</b>\n\n` +
+            `ID: <code>#${report._id.toString().slice(-6)}</code>\n` +
+            `Status: ${statusEmoji} <b>${report.status.toUpperCase()}</b>\n` +
+            `Type: ${report.type.toUpperCase()}\n\n` +
+            `📝 <b>Details:</b>\n${report.details}\n\n`;
+            
+        if (report.response) {
+            text += `${t(ctx, 'response_from_admin')}\n${report.response}\n\n`;
+        }
+
+        const buttons = [
+            [Markup.button.callback(t(ctx, 'back'), 'back_to_reports')],
+            [Markup.button.callback(t(ctx, 'delete_report'), `delete_${id}`)]
+        ];
+
+        await ctx.editMessageText(text, { parse_mode: 'HTML', ...Markup.inlineKeyboard(buttons) });
+    } catch (err) {
+        ctx.answerCbQuery("Error loading report.");
+    }
+});
+
+bot.action('back_to_reports', async (ctx) => {
+    await ctx.answerCbQuery();
+    // Re-trigger the profile view logic
+    const reports = await Report.find({ userId: ctx.from.id }).sort({ createdAt: -1 }).limit(10);
+    const buttons = reports.map(r => {
+        const statusEmoji = r.status === 'resolved' ? '✅' : (r.status === 'reviewed' ? '👀' : '⏳');
+        return [Markup.button.callback(`${statusEmoji} #${r._id.toString().slice(-6)}`, `view_${r._id}`)];
+    });
+    await ctx.editMessageText(t(ctx, 'reports_list'), { parse_mode: 'HTML', ...Markup.inlineKeyboard(buttons) });
+});
+
+bot.action(/delete_(.+)/, async (ctx) => {
+    const id = ctx.match[1];
+    const buttons = [
+        [Markup.button.callback("⚠️ YES, Delete", `confirm_del_${id}`)],
+        [Markup.button.callback("No, Cancel", `view_${id}`)]
+    ];
+    await ctx.editMessageText(t(ctx, 'confirm_delete'), Markup.inlineKeyboard(buttons));
+});
+
+bot.action(/confirm_del_(.+)/, async (ctx) => {
+    const id = ctx.match[1];
+    await Report.findByIdAndDelete(id);
+    await ctx.answerCbQuery("Report withdrawn.");
+    await ctx.editMessageText("✅ Report has been withdrawn.", Markup.inlineKeyboard([[Markup.button.callback(t(ctx, 'back'), 'back_to_reports')]]));
 });
 
 // Callback Action Handlers
@@ -249,7 +345,7 @@ bot.action('anon_yes', async (ctx) => {
     ctx.session.isAnonymous = true;
     ctx.session.secretKey = crypto.randomBytes(4).toString('hex').toUpperCase();
     await ctx.answerCbQuery();
-    await finalizeReport(ctx);
+    await showSummary(ctx);
 });
 
 bot.action('anon_no', async (ctx) => {
@@ -258,6 +354,27 @@ bot.action('anon_no', async (ctx) => {
     await ctx.answerCbQuery();
     await ctx.replyWithHTML(t(ctx, 'step5'));
 });
+
+bot.action('confirm_submit', async (ctx) => {
+    await ctx.answerCbQuery();
+    await finalizeReport(ctx);
+});
+
+async function showSummary(ctx) {
+    const { type, details, isAnonymous, evidence, name, lang } = ctx.session;
+    
+    const privacyText = isAnonymous ? 
+        (lang === 'am' ? 'ምስጢራዊ' : 'Anonymous') : 
+        (lang === 'am' ? `ማንነት የታወቀ (${name})` : `Identified (${name})`);
+
+    const summaryMsg = t(ctx, 'summary')
+        .replace('#TYPE', type.toUpperCase())
+        .replace('#PRIVACY', privacyText)
+        .replace('#DETAILS', details.substring(0, 500))
+        .replace('#EVIDENCE', evidence.length);
+
+    await ctx.replyWithHTML(summaryMsg, getUI(ctx).confirmation);
+}
 
 // Universal Input Handler
 bot.on(['text', 'photo', 'document'], async (ctx) => {
@@ -283,7 +400,7 @@ bot.on(['text', 'photo', 'document'], async (ctx) => {
     }
     else if (state === 'AWAITING_EMAIL' && ctx.message.text) {
         ctx.session.email = ctx.message.text;
-        await finalizeReport(ctx);
+        await showSummary(ctx);
     }
 });
 
@@ -326,11 +443,12 @@ async function finalizeReport(ctx) {
 
         await ctx.telegram.deleteMessage(ctx.chat.id, msg.message_id);
         
-        const successMsg = t(ctx, 'success')
+        const successStr = isAnonymous ? t(ctx, 'success_anon') : t(ctx, 'success_id');
+        const finalMsg = successStr
             .replace('#REF', report._id.toString().slice(-6))
             .replace('#KEY', secretKey || 'N/A');
         
-        await ctx.replyWithHTML(successMsg, getUI(ctx).main);
+        await ctx.replyWithHTML(finalMsg, getUI(ctx).main);
 
     } catch (err) {
         console.error(err);
