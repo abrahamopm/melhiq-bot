@@ -43,17 +43,18 @@ bot.use((ctx, next) => {
 const STRINGS = {
     en: {
         welcome: "⚓ <b>Welcome to Melhiq!</b>\n\nI am your Safeguarding Anchor for EngenderHealth YAC. This is a safe space for you.",
+        intro: "🛡️ <b>Our Privacy Promise</b>\n\nMelhiq is designed to be a safe, secure, and confidential platform. Whether you choose to remain anonymous or identify yourself, your information is handled with the utmost care by our safeguarding team.\n\n<i>Your voice matters. Let's make our community safer together.</i>",
         lang_choice: "Please select your language / እባክዎን ቋንቋዎን ይምረጡ፡",
         main_menu: "Main Menu",
         new_sub: "📝 New Submission",
         safety_info: "🛡️ Safety Info",
         help: "🆘 Help",
         profile: "👤 My Reports",
-        step1: "<b>Step 1/5: Type</b>\nWhat would you like to share?",
-        step2: "<b>Step 2/5: Details</b>\nPlease describe the situation. You can also send a photo or document as evidence after this message.",
-        step3: "<b>Step 3/5: Evidence</b>\nWould you like to attach any evidence (Photo/File)? If not, click 'Continue'.",
-        step4: "<b>Step 4/5: Privacy</b>\nHow should we handle your identity?",
-        step5: "<b>Step 5/5: Contact</b>\nPlease provide your Name/Email:",
+        step1: "<b>Step 1/5 [🔵⚪⚪⚪⚪]</b>\nWhat would you like to share?",
+        step2: "<b>Step 2/5 [🔵🔵⚪⚪⚪]</b>\nPlease describe the situation in detail. What happened? When and where?",
+        step3: "<b>Step 3/5 [🔵🔵🔵⚪⚪]</b>\nWould you like to attach any evidence (Photo/File)? If not, click 'Continue'.",
+        step4: "<b>Step 4/5 [🔵🔵🔵🔵⚪]</b>\nHow should we handle your identity?",
+        step5: "<b>Step 5/5 [🔵🔵🔵🔵🔵]</b>\nPlease provide your Name and Email for follow-up:",
         anon_desc: "👤 <b>Anonymous Mode:</b> We will NOT store your Telegram ID or name with the report. You will receive a <b>Secret Key</b> to track your report.",
         identified: "🆔 <b>Identified Mode:</b> Your name and email will be shared with the Safeguarding Team for direct follow-up.",
         success_anon: "✅ <b>Report Anchored Anonymously!</b>\n\n" +
@@ -65,13 +66,13 @@ const STRINGS = {
                     "You can track the status of this report in the <b>'My Reports'</b> menu.",
         summary: "📝 <b>Report Summary</b>\n\n" +
                  "Type: <b>#TYPE</b>\n" +
-                 "Privacy: <b>#PRIVACY</b>\n" +
-                 "Details: #DETAILS\n" +
-                 "Evidence: #EVIDENCE files\n\n" +
-                 "Is this correct?",
+                 "Privacy: <b>#PRIVACY</b>\n\n" +
+                 "<b>Details:</b>\n#DETAILS\n\n" +
+                 "📎 <b>Evidence:</b> #EVIDENCE files\n\n" +
+                 "Is this information correct?",
         confirm: "✅ Confirm & Submit",
         processing: "Securing Report",
-        evidence_added: "✅ Evidence attached!",
+        evidence_added: "✅ Evidence attached! (#COUNT files total)",
         continue: "➡️ Continue",
         no_reports: "📝 You have no identified reports.",
         reports_list: "📋 <b>Your Identified Reports:</b>\n\n",
@@ -80,37 +81,40 @@ const STRINGS = {
                   "• <b>👤 Anonymous Mode:</b> Your identity is hidden. Save the Secret Key!\n" +
                   "• <b>🆔 Identified Mode:</b> We store your name/email for follow-up.\n" +
                   "• <b>📋 My Reports:</b> View and manage reports you sent in Identified Mode.\n" +
-                  "• <b>🔍 Check Report:</b> Use <code>/check [SecretKey]</code> to track anonymous reports.",
+                  "• <b>🔍 Check Report:</b> Track anonymous reports with your Secret Key.",
         help_admin: "\n\n🛠️ <b>Admin Control Panel:</b>\n" +
-                   "• <code>/list</code> - View pending reports (click ID to copy)\n" +
-                   "• <code>/respond [ID] [Msg]</code> - Reply to a specific report\n" +
+                   "• <code>/list</code> - View pending reports\n" +
+                   "• <code>/respond [ID] [Msg]</code> - Reply to a report\n" +
                    "• <code>/resolve [ID]</code> - Mark a report as finished\n" +
                    "• <code>/stats</code> - View system statistics\n" +
-                   "• <code>/broadcast [Msg]</code> - Send message to ALL users\n\n" +
-                   "<i>Note: IDs are the long hex strings provided in notifications.</i>",
+                   "• <code>/broadcast [Msg]</code> - Message all users",
         response_from_admin: "💬 <b>Admin Response:</b>",
-        no_response_yet: "<i>No response yet.</i>",
+        no_response_yet: "<i>Waiting for review.</i>",
         update_notification: "🔔 <b>Update on your report #${REF}:</b>\n\n${MSG}",
         resolved_notification: "✅ <b>Your report #${REF} has been resolved.</b>",
         cancel: "❌ Cancel",
         back: "⬅️ Back",
         view_details: "📄 View Details",
         delete_report: "🗑️ Withdraw Report",
-        confirm_delete: "Are you sure you want to withdraw this report? This cannot be undone."
+        confirm_delete: "Are you sure you want to withdraw this report? This cannot be undone.",
+        check_report_prompt: "🔍 Please enter your <b>Secret Key</b> to check your report status:",
+        invalid_key: "❌ Invalid Secret Key. Please check and try again.",
+        how_it_works: "❔ How it Works"
     },
     am: {
         welcome: "⚓ <b>እንኳን ወደ መልሕቅ በሰላም መጡ!</b>\n\nእኔ ለኢንጀንደር ሄልዝ (EngenderHealth) YAC የጥበቃ መልሕቅ ነኝ። ይህ ለእርስዎ አስተማማኝ ቦታ ነው።",
+        intro: "🛡️ <b>የግላዊነት ቃል ኪዳናችን</b>\n\nመልሕቅ ደህንነቱ የተጠበቀ እና ሚስጥራዊነት ያለው መድረክ እንዲሆን ተደርጎ የተሰራ ነው። ማንነትዎን ቢደብቁም ባይደብቁም መረጃዎ በጥበቃ ቡድናችን በጥንቃቄ ይያዛል።\n\n<i>የእርስዎ ድምጽ ትልቅ ዋጋ አለው። ማህበረሰባችንን በጋራ ደህንነቱ የተጠበቀ እናድርግ።</i>",
         lang_choice: "እባክዎን ቋንቋ ይምረጡ፡",
         main_menu: "ዋና ማውጫ",
         new_sub: "📝 አዲስ ሪፖርት",
         safety_info: "🛡️ ስለ ጥበቃ",
         help: "🆘 እርዳታ",
         profile: "👤 የእኔ ሪፖርቶች",
-        step1: "<b>ደረጃ 1/5፡ ዓይነት</b>\nምን ማጋራት ይፈልጋሉ?",
-        step2: "<b>ደረጃ 2/5፡ ዝርዝር</b>\nእባክዎን ሁኔታውን ይግለጹ። ከዚህ መልዕክት በኋላ ፎቶ ወይም ሰነድ እንደ ማስረጃ መላክ ይችላሉ።",
-        step3: "<b>ደረጃ 3/5፡ ማስረጃ</b>\nማስረጃ (ፎቶ/ፋይል) ማያያዝ ይፈልጋሉ? ካልፈለጉ 'ቀጥል' የሚለውን ይጫኑ።",
-        step4: "<b>ደረጃ 4/5፡ ግላዊነት</b>\nማንነትዎ እንዴት ይያዝ?",
-        step5: "<b>ደረጃ 5/5፡ አድራሻ</b>\nእባክዎን ስምዎን እና ኢሜልዎን ያስገቡ፡",
+        step1: "<b>ደረጃ 1/5 [🔵⚪⚪⚪⚪]፡ ዓይነት</b>\nምን ማጋራት ይፈልጋሉ?",
+        step2: "<b>ደረጃ 2/5 [🔵🔵⚪⚪⚪]፡ ዝርዝር</b>\nእባክዎን ሁኔታውን በዝርዝር ይግለጹ። ምን ተፈጠረ? መቼ እና የት?",
+        step3: "<b>ደረጃ 3/5 [🔵🔵🔵⚪⚪]፡ ማስረጃ</b>\nማስረጃ (ፎቶ/ፋይል) ማያያዝ ይፈልጋሉ? ካልፈለጉ 'ቀጥል' የሚለውን ይጫኑ።",
+        step4: "<b>ደረጃ 4/5 [🔵🔵🔵🔵⚪]፡ ግላዊነት</b>\nማንነትዎ እንዴት ይያዝ?",
+        step5: "<b>ደረጃ 5/5 [🔵🔵🔵🔵🔵]፡ አድራሻ</b>\nእባክዎን ለቀጣይ ክትትል ስምዎን እና ኢሜልዎን ያስገቡ፡",
         anon_desc: "👤 <b>ማንነትን መደበቅ፡</b> የእርስዎን የቴሌግራም መለያ ወይም ስም ከሪፖርቱ ጋር አንይዝም። ሪፖርቱን ለመከታተል <b>ሚስጥራዊ ቁልፍ</b> ይሰጥዎታል።",
         identified: "🆔 <b>ማንነትን ማሳወቅ፡</b> ለቀጥታ ክትትል ስምዎ እና ኢሜልዎ ለጥበቃ ቡድኑ ይጋራሉ።",
         success_anon: "✅ <b>ሪፖርቱ በምስጢር ተመዝግቧል!</b>\n\n" +
@@ -122,13 +126,13 @@ const STRINGS = {
                     "የሪፖርቱን ሁኔታ <b>'የእኔ ሪፖርቶች'</b> በሚለው ማውጫ ውስጥ መከታተል ይችላሉ።",
         summary: "📝 <b>የሪፖርት ማጠቃለያ</b>\n\n" +
                  "ዓይነት፡ <b>#TYPE</b>\n" +
-                 "ግላዊነት፡ <b>#PRIVACY</b>\n" +
-                 "ዝርዝር፡ #DETAILS\n" +
-                 "ማስረጃ፡ #EVIDENCE ፋይሎች\n\n" +
+                 "ግላዊነት፡ <b>#PRIVACY</b>\n\n" +
+                 "<b>ዝርዝር፡</b>\n#DETAILS\n\n" +
+                 "📎 <b>ማስረጃ፡</b> #EVIDENCE ፋይሎች\n\n" +
                  "ትክክል ነው?",
         confirm: "✅ አረጋግጥና ላክ",
         processing: "ሪፖርቱን በማስቀመጥ ላይ",
-        evidence_added: "✅ ማስረጃ ተያይዟል!",
+        evidence_added: "✅ ማስረጃ ተያይዟል! (በጠቅላላ #COUNT ፋይሎች)",
         continue: "➡️ ቀጥል",
         no_reports: "📝 ምንም የተመዘገበ ሪፖርት የለዎትም።",
         reports_list: "📋 <b>የእርስዎ ሪፖርቶች፡</b>\n\n",
@@ -137,23 +141,25 @@ const STRINGS = {
                   "• <b>👤 ማንነትን መደበቅ፡</b> ማንነትዎ አይታወቅም። ሚስጥራዊ ቁልፉን ያስቀምጡ!\n" +
                   "• <b>🆔 ማንነትን ማሳወቅ፡</b> ለቀጥታ ክትትል ስምዎን/ኢሜልዎን እናስቀምጣለን።\n" +
                   "• <b>📋 የእኔ ሪፖርቶች፡</b> ስምዎን ጠቅሰው የላኳቸውን ሪፖርቶች እዚህ ያገኛሉ።\n" +
-                  "• <b>🔍 ሪፖርት መከታተያ፡</b> ስም ሳይጠቅሱ የላኩትን ሪፖርት ለመከታተል <code>/check [SecretKey]</code> ይጠቀሙ::",
+                  "• <b>🔍 ሪፖርት መከታተያ፡</b> በሚስጥራዊ ቁልፍዎ ሪፖርቶችን ይከታተሉ::",
         help_admin: "\n\n🛠️ <b>የአስተዳዳሪ መቆጣጠሪያ፡</b>\n" +
-                   "• <code>/list</code> - በመጠባበቅ ላይ ያሉ ሪፖርቶችን ለማየት (ID ለመቅዳት ይጫኑ)\n" +
-                   "• <code>/respond [ID] [ምላሽ]</code> - ለተወሰነ ሪፖርት ምላሽ ለመስጠት\n" +
+                   "• <code>/list</code> - በመጠባበቅ ላይ ያሉ ሪፖርቶችን ለማየት\n" +
+                   "• <code>/respond [ID] [ምላሽ]</code> - ለሪፖርት ምላሽ ለመስጠት\n" +
                    "• <code>/resolve [ID]</code> - ሪፖርት ተጠናቋል ለማለት\n" +
                    "• <code>/stats</code> - አጠቃላይ መረጃ ለማየት\n" +
-                   "• <code>/broadcast [መልዕክት]</code> - ለሁሉም ተጠቃሚዎች መልዕክት ለመላክ\n\n" +
-                   "<i>ማሳሰቢያ፡ ID ማለት በሪፖርት ማሳወቂያ ላይ የሚመጣው ረጅም ቁጥር ነው።</i>",
+                   "• <code>/broadcast [መልዕክት]</code> - ለሁሉም ተጠቃሚዎች መልዕክት ለመላክ",
         response_from_admin: "💬 <b>የአስተዳዳሪ ምላሽ፡</b>",
-        no_response_yet: "<i>እስካሁን ምንም ምላሽ አልተሰጠም።</i>",
+        no_response_yet: "<i>ክለሳ በመጠባበቅ ላይ።</i>",
         update_notification: "🔔 <b>በሪፖርት ቁጥር #${REF} ላይ የተሰጠ ምላሽ፡</b>\n\n${MSG}",
         resolved_notification: "✅ <b>የሪፖርት ቁጥር #${REF} ተፈቷል (Resolved)።</b>",
         cancel: "❌ ሰርዝ",
         back: "⬅️ ተመለስ",
         view_details: "📄 ዝርዝር አሳይ",
         delete_report: "🗑️ ሪፖርቱን ሰርዝ",
-        confirm_delete: "እርግጠኛ ነዎት ይህንን ሪፖርት መሰረዝ ይፈልጋሉ? ይህ ድርጊት ሊመለስ አይችልም።"
+        confirm_delete: "እርግጠኛ ነዎት ይህንን ሪፖርት መሰረዝ ይፈልጋሉ? ይህ ድርጊት ሊመለስ አይችልም።",
+        check_report_prompt: "🔍 ሪፖርትዎን ለመከታተል እባክዎን <b>ሚስጥራዊ ቁልፉን</b> ያስገቡ፡",
+        invalid_key: "❌ የተሳሳተ ሚስጥራዊ ቁልፍ። እባክዎን አረጋግጠው ድጋሚ ይሞክሩ።",
+        how_it_works: "❔ እንዴት ነው የሚሰራው?"
     }
 };
 
@@ -167,18 +173,32 @@ const getUI = (ctx) => ({
     ]).resize(),
     
     types: Markup.inlineKeyboard([
-        [Markup.button.callback('💬 Comment / አስተያየት', 'type_comment')],
-        [Markup.button.callback('🚫 Complaint / ቅሬታ', 'type_complaint')]
+        [Markup.button.callback('🛡️ Safeguarding / ጥበቃ', 'type_harassment')],
+        [Markup.button.callback('🚫 Complaint / ቅሬታ', 'type_complaint')],
+        [Markup.button.callback('💡 Suggestion / አስተያየት', 'type_feedback')],
+        [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
     ]),
 
-    evidence: Markup.inlineKeyboard([
+    details: Markup.inlineKeyboard([
+        [Markup.button.callback(t(ctx, 'back'), 'back_to_step1')],
+        [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
+    ]),
+
+    evidence: (count = 0) => Markup.inlineKeyboard([
         [Markup.button.callback(t(ctx, 'continue'), 'evidence_done')],
+        [Markup.button.callback(t(ctx, 'back'), 'back_to_step2')],
         [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
     ]),
 
     anonymity: Markup.inlineKeyboard([
         [Markup.button.callback(t(ctx, 'anon_desc').split('\n')[0], 'anon_yes')],
         [Markup.button.callback(t(ctx, 'identified').split('\n')[0], 'anon_no')],
+        [Markup.button.callback(t(ctx, 'back'), 'back_to_step3')],
+        [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
+    ]),
+
+    contact: Markup.inlineKeyboard([
+        [Markup.button.callback(t(ctx, 'back'), 'back_to_step4')],
         [Markup.button.callback(t(ctx, 'cancel'), 'cancel_report')]
     ]),
 
@@ -237,7 +257,76 @@ bot.action(/lang_(.+)/, async (ctx) => {
     ctx.session.lang = lang;
     await User.updateOne({ telegramId: ctx.from.id }, { language: lang });
     await ctx.answerCbQuery();
-    await ctx.replyWithHTML(t(ctx, 'welcome'), getUI(ctx).main);
+    
+    await ctx.replyWithHTML(
+        t(ctx, 'intro'),
+        Markup.inlineKeyboard([
+            [Markup.button.callback(t(ctx, 'main_menu') + " ➡️", 'back_to_main')],
+            [Markup.button.callback(t(ctx, 'how_it_works'), 'show_help_intro')]
+        ])
+    );
+});
+
+bot.action('show_help_intro', async (ctx) => {
+    await ctx.answerCbQuery();
+    await showHelp(ctx);
+    await ctx.reply(t(ctx, 'main_menu'), getUI(ctx).main);
+});
+
+// Navigation Handlers
+bot.action('back_to_step1', async (ctx) => {
+    ctx.session.state = 'AWAITING_TYPE';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(t(ctx, 'step1'), { parse_mode: 'HTML', ...getUI(ctx).types });
+});
+
+bot.action('back_to_step2', async (ctx) => {
+    ctx.session.state = 'AWAITING_DETAILS';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(t(ctx, 'step2'), { parse_mode: 'HTML', ...getUI(ctx).details });
+});
+
+bot.action('back_to_step3', async (ctx) => {
+    ctx.session.state = 'AWAITING_EVIDENCE';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(t(ctx, 'step3'), { parse_mode: 'HTML', ...getUI(ctx).evidence(ctx.session.evidence?.length) });
+});
+
+bot.action('back_to_step4', async (ctx) => {
+    ctx.session.state = 'AWAITING_ANONYMITY';
+    await ctx.answerCbQuery();
+    await ctx.editMessageText(t(ctx, 'step4'), { parse_mode: 'HTML', ...getUI(ctx).anonymity });
+});
+
+// Admin Button Handlers
+bot.action(/admin_respond_(.+)/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Unauthorized.");
+    const reportId = ctx.match[1];
+    ctx.session.adminState = { state: 'REPLYING', reportId };
+    await ctx.answerCbQuery();
+    await ctx.reply(`✍️ Type your response for report #${reportId.slice(-6)}:`);
+});
+
+bot.action(/admin_resolve_(.+)/, async (ctx) => {
+    if (!isAdmin(ctx.from.id)) return ctx.answerCbQuery("Unauthorized.");
+    const id = ctx.match[1];
+    await ctx.answerCbQuery();
+    
+    try {
+        const report = await Report.findByIdAndUpdate(id, { status: 'resolved' }, { new: true });
+        if (!report) return ctx.reply("Report not found.");
+        
+        await ctx.reply(`✅ Report #${report._id.toString().slice(-6)} marked as RESOLVED.`);
+        
+        if (report.userId !== 0) {
+            const lang = report.language || 'en';
+            const notification = STRINGS[lang].resolved_notification
+                .replace('${REF}', report._id.toString().slice(-6));
+            ctx.telegram.sendMessage(report.userId, notification, { parse_mode: 'HTML' }).catch(() => {});
+        }
+    } catch (err) {
+        ctx.reply("Error: " + err.message);
+    }
 });
 
 // Menu Handlers
@@ -289,8 +378,14 @@ async function showHelp(ctx) {
     if (isAdmin(ctx.from.id)) {
         text += t(ctx, 'help_admin');
     }
-    await ctx.replyWithHTML(text);
+    const buttons = [[Markup.button.callback('🔍 Track Anonymous Report', 'prompt_check')]];
+    await ctx.replyWithHTML(text, Markup.inlineKeyboard(buttons));
 }
+
+bot.action('prompt_check', async (ctx) => {
+    await ctx.answerCbQuery();
+    await ctx.replyWithHTML(t(ctx, 'check_report_prompt'));
+});
 
 
 
@@ -372,7 +467,7 @@ bot.action(/type_(.+)/, async (ctx) => {
     ctx.session.state = 'AWAITING_DETAILS';
     ctx.session.evidence = [];
     await ctx.answerCbQuery();
-    await ctx.editMessageText(t(ctx, 'step2'), { parse_mode: 'HTML' });
+    await ctx.editMessageText(t(ctx, 'step2'), { parse_mode: 'HTML', ...getUI(ctx).details });
 });
 
 bot.action('evidence_done', async (ctx) => {
@@ -404,14 +499,14 @@ async function showSummary(ctx) {
     const { type, details, isAnonymous, evidence, name, lang } = ctx.session;
     
     const privacyText = isAnonymous ? 
-        (lang === 'am' ? 'ምስጢራዊ' : 'Anonymous') : 
-        (lang === 'am' ? `ማንነት የታወቀ (${name})` : `Identified (${name})`);
+        (lang === 'am' ? '👥 ምስጢራዊ (Anonymous)' : '👥 Anonymous') : 
+        (lang === 'am' ? `🆔 ማንነት የታወቀ (${name})` : `🆔 Identified (${name})`);
 
     const summaryMsg = t(ctx, 'summary')
         .replace('#TYPE', type.toUpperCase())
         .replace('#PRIVACY', privacyText)
-        .replace('#DETAILS', details.substring(0, 500))
-        .replace('#EVIDENCE', evidence.length);
+        .replace('#DETAILS', details.substring(0, 1000))
+        .replace('#EVIDENCE', evidence?.length || 0);
 
     await ctx.replyWithHTML(summaryMsg, getUI(ctx).confirmation);
 }
@@ -423,11 +518,11 @@ async function finalizeReport(ctx) {
     const { type, details, isAnonymous, name, email, evidence, secretKey, lang } = ctx.session;
     
     // UI Feedback
-    let msg = await ctx.reply(`${t(ctx, 'processing')}... [■□□□□]`);
+    let msg = await ctx.reply(`${t(ctx, 'processing')}... [■■■■□]`);
 
     try {
         const report = new Report({
-            userId: isAnonymous ? 0 : ctx.from.id, // Zero out ID for true anonymity
+            userId: isAnonymous ? 0 : ctx.from.id,
             username: isAnonymous ? 'anonymous' : ctx.from.username,
             type,
             details,
@@ -439,25 +534,31 @@ async function finalizeReport(ctx) {
         });
         await report.save();
 
-        // Notify Admins
+        // Notify Admins with interactive buttons
         const adminMsg = 
-            `🚨 <b>NEW REPORT</b>\n` +
-            `ID: <code>${report._id.toString()}</code>\n` +
-            `Type: ${type.toUpperCase()}\n` +
-            `Anon: ${isAnonymous ? 'YES' : 'NO'}\n` +
-            `Key: <code>${secretKey || 'N/A'}</code>\n\n` +
-            `Details: ${details}`;
+            `🚨 <b>NEW REPORT: ${type.toUpperCase()}</b>\n` +
+            `━━━━━━━━━━━━━━━━━━━━\n` +
+            `🆔 ID: <code>${report._id.toString()}</code>\n` +
+            `👤 User: ${isAnonymous ? '<i>Anonymous</i>' : '@' + (ctx.from.username || 'N/A')}\n` +
+            `🔑 Key: <code>${secretKey || 'N/A'}</code>\n\n` +
+            `📝 <b>Details:</b>\n${details}\n` +
+            `📎 <b>Evidence:</b> ${evidence.length} files`;
         
+        const adminKeyboard = Markup.inlineKeyboard([
+            [Markup.button.callback('💬 Respond', `admin_respond_${report._id}`)],
+            [Markup.button.callback('✅ Resolve', `admin_resolve_${report._id}`)]
+        ]);
+
         for (const adminId of ADMIN_IDS) {
-            await ctx.telegram.sendMessage(adminId, adminMsg, { parse_mode: 'HTML' }).catch(() => {});
-            // Send evidence to admins
+            await ctx.telegram.sendMessage(adminId, adminMsg, { parse_mode: 'HTML', ...adminKeyboard }).catch(() => {});
+            // Send evidence
             for (const item of evidence) {
                 if (item.fileType === 'photo') await ctx.telegram.sendPhoto(adminId, item.fileId);
                 else await ctx.telegram.sendDocument(adminId, item.fileId);
             }
         }
 
-        await ctx.telegram.deleteMessage(ctx.chat.id, msg.message_id);
+        await ctx.telegram.deleteMessage(ctx.chat.id, msg.message_id).catch(() => {});
         
         const successStr = isAnonymous ? t(ctx, 'success_anon') : t(ctx, 'success_id');
         const finalMsg = successStr
@@ -470,7 +571,7 @@ async function finalizeReport(ctx) {
         console.error(err);
         ctx.reply("⚠️ Error saving report.");
     }
-    ctx.session = { lang: ctx.session.lang }; // Reset session but keep language
+    ctx.session = { lang: ctx.session.lang }; // Reset session
 }
 
 // --- Admin Commands ---
@@ -512,11 +613,11 @@ bot.command('broadcast', async (ctx) => {
 
 bot.command('check', async (ctx) => {
     const key = ctx.message.text.split(' ')[1];
-    if (!key) return ctx.reply("Usage: /check [SecretKey]");
+    if (!key) return ctx.replyWithHTML(t(ctx, 'check_report_prompt'));
     
     try {
         const report = await Report.findOne({ secretKey: key.toUpperCase() });
-        if (!report) return ctx.reply("❌ Invalid Secret Key.");
+        if (!report) return ctx.reply(t(ctx, 'invalid_key'));
         
         const statusEmoji = report.status === 'resolved' ? '✅' : (report.status === 'reviewed' ? '👀' : '⏳');
         
@@ -533,7 +634,7 @@ bot.command('check', async (ctx) => {
             text += `${t(ctx, 'no_response_yet')}\n\n`;
         }
         
-        ctx.replyWithHTML(text);
+        ctx.replyWithHTML(text, getUI(ctx).backOnly);
     } catch (err) {
         ctx.reply("Error: " + err.message);
     }
@@ -632,6 +733,34 @@ bot.command('resolve', async (ctx) => {
 
 // Universal Input Handler (Registered last to avoid swallowing commands)
 bot.on(['text', 'photo', 'document'], async (ctx) => {
+    // 1. Handle Admin Responses
+    if (ctx.session?.adminState?.state === 'REPLYING' && ctx.message.text) {
+        const { reportId } = ctx.session.adminState;
+        try {
+            const report = await Report.findById(reportId);
+            if (!report) return ctx.reply("Report not found.");
+
+            report.response = ctx.message.text;
+            report.respondedAt = new Date();
+            report.status = 'reviewed';
+            await report.save();
+
+            ctx.reply("✅ Response sent to user.");
+            ctx.session.adminState = null;
+
+            if (report.userId !== 0) {
+                const lang = report.language || 'en';
+                const notification = STRINGS[lang].update_notification
+                    .replace('${REF}', report._id.toString().slice(-6))
+                    .replace('${MSG}', ctx.message.text);
+                ctx.telegram.sendMessage(report.userId, notification, { parse_mode: 'HTML' }).catch(() => {});
+            }
+        } catch (err) {
+            ctx.reply("Error sending response.");
+        }
+        return;
+    }
+
     const state = ctx.session?.state;
     if (!state) return;
 
@@ -641,19 +770,21 @@ bot.on(['text', 'photo', 'document'], async (ctx) => {
     if (state === 'AWAITING_DETAILS' && ctx.message.text) {
         ctx.session.details = ctx.message.text;
         ctx.session.state = 'AWAITING_EVIDENCE';
-        await ctx.replyWithHTML(t(ctx, 'step3'), getUI(ctx).evidence);
+        await ctx.replyWithHTML(t(ctx, 'step3'), getUI(ctx).evidence(0));
     } 
     else if (state === 'AWAITING_EVIDENCE') {
         const fileId = ctx.message.photo ? ctx.message.photo.pop().file_id : (ctx.message.document?.file_id);
         if (fileId) {
+            ctx.session.evidence = ctx.session.evidence || [];
             ctx.session.evidence.push({ fileId, fileType: ctx.message.photo ? 'photo' : 'document' });
-            await ctx.reply(t(ctx, 'evidence_added'), getUI(ctx).evidence);
+            const count = ctx.session.evidence.length;
+            await ctx.reply(t(ctx, 'evidence_added').replace('#COUNT', count), getUI(ctx).evidence(count));
         }
     }
     else if (state === 'AWAITING_NAME' && ctx.message.text) {
         ctx.session.name = ctx.message.text;
         ctx.session.state = 'AWAITING_EMAIL';
-        await ctx.reply("Email / ኢሜል:");
+        await ctx.reply("Email / ኢሜል:", getUI(ctx).contact);
     }
     else if (state === 'AWAITING_EMAIL' && ctx.message.text) {
         ctx.session.email = ctx.message.text;

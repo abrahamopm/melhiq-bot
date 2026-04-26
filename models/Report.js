@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const reportSchema = new mongoose.Schema({
     userId: { type: Number, required: true },
     username: String,
-    type: { type: String, enum: ['comment', 'complaint'], required: true },
+    type: { type: String, enum: ['comment', 'complaint', 'harassment', 'safety', 'feedback'], required: true },
     details: { type: String, required: true },
     isAnonymous: { type: Boolean, default: true },
     secretKey: { type: String, unique: true }, // For anonymous follow-ups
